@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recomend_object_view"
+    android:layout_width="150dp"
+    android:layout_height="140dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/img_shell_for_sitings"
+    android:tint="@color/cardview_dark_background"
+    android:scaleType="fitXY">
+</ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="5dp"
+
+            android:layout_margin="@dimen/menu_margin_recomend"
+            android:scaleType="fitXY"
+            android:src="@drawable/star_for_recomends" />
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/menu_margin_recomend"
+                android:layout_marginEnd="@dimen/menu_margin_recomend"
+                android:textSize="14sp"
+                android:text="Поднять резюме в поиске"
+                android:paddingTop="2dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/menu_margin_recomend"
+            android:layout_marginEnd="@dimen/menu_margin_recomend"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="14sp"
+            android:text="Поднять"
+            android:paddingTop="2dp" />
+    </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

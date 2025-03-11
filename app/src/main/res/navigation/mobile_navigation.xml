@@ -3,23 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_sours">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.testjobsearch.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_sours"
+        android:name="com.example.testjobsearch.ui.sours.SoursFragment"
+        android:label="@string/title_sours"
+        tools:layout="@layout/fragment_sours" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.testjobsearch.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_like"
+        android:name="com.example.testjobsearch.ui.like.LikeFragment"
+        android:label="@string/title_like"
+        tools:layout="@layout/fragment_like" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.testjobsearch.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_responses"
+        android:name="com.example.testjobsearch.ui.responses.ResponsesFragment"
+        android:label="@string/title_responses"
+        tools:layout="@layout/fragment_responses" />
+    <fragment
+        android:id="@+id/navigation_message"
+        android:name="com.example.testjobsearch.ui.message.MessageFragment"
+        android:label="@string/title_message"
+        tools:layout="@layout/fragment_message" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.testjobsearch.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
