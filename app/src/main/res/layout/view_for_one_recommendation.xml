@@ -15,14 +15,10 @@
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:src="@drawable/img_shell_for_sitings"
+    android:src="@drawable/img_shell_for_recomends"
     android:tint="@color/cardview_dark_background"
     android:scaleType="fitXY">
 </ImageView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +31,7 @@
 
             android:layout_margin="@dimen/menu_margin_recomend"
             android:scaleType="fitXY"
-            android:src="@drawable/star_for_recomends" />
+            android:src="@drawable/img_star_for_recomends" />
 
             <TextView
                 android:id="@+id/item_text"
@@ -47,6 +43,7 @@
                 android:text="Поднять резюме в поиске"
                 android:paddingTop="2dp" />
         <TextView
+            android:id="@+id/item_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/menu_margin_recomend"
@@ -55,6 +52,5 @@
             android:textSize="14sp"
             android:text="Поднять"
             android:paddingTop="2dp" />
-    </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recomend_object_view"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:paddingTop="7.5dp"
+    android:paddingBottom="7.5dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/img_shell_for_vacancies"
+    android:tint="@color/cardview_dark_background"
+    android:scaleType="fitXY">
+</ImageView>
+    <ImageView
+        android:id="@+id/image_like"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="5dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_heart"
+        android:layout_gravity="end"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_watching"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="15.5sp"
+            android:text="Сейчас просматривают 1 человек" />
+        <TextView
+            android:id="@+id/text_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="19sp"
+            android:text="UI/UX Designer" />
+        <TextView
+            android:id="@+id/text_town"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textSize="15.5sp"
+            android:text="Минск" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/text_name_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="15.5sp"
+            android:text="Мобирикс" />
+        <ImageView
+            android:id="@+id/image_town"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2.5dp"
+            android:layout_marginLeft="8dp"
+            android:paddingTop="3dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_accordance" />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4sp">
+            <ImageView
+                android:id="@+id/image_experience"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:paddingTop="2dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_experience" />
+            <TextView
+                android:id="@+id/text_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="8dp"
+                android:textSize="15.5sp"
+                android:text="Опыт от 1 года до 3 лет" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/text_published"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:textColor="@color/my_gray"
+            android:text="Опубликовано 20 февраля" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/but_respond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="18sp"
+        android:textSize="16sp"
+        android:text="Откликнуться"
+        android:background="@drawable/style_but_respond"
+        android:layout_gravity="bottom"
+        android:textAllCaps="false"></Button>
+</FrameLayout>

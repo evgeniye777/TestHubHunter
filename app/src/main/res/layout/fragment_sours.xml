@@ -75,10 +75,29 @@
         </FrameLayout>
     </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recyclerViewRecommends"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_marginTop="15dp"
             app:layoutManager="LinearLayoutManager" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="15dp"
+            android:text="Вакансии для вас"></TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewVacancies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="57.5dp"
+            app:layoutManager="LinearLayoutManager" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            ></Button>
      </LinearLayout>
  </FrameLayout>
