@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recomend_object_view"
     android:layout_width="150dp"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
     android:paddingLeft="5dp"
@@ -25,9 +25,8 @@
         android:orientation="vertical">
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
 
             android:layout_margin="@dimen/menu_margin_recomend"
             android:scaleType="fitXY"
@@ -51,6 +50,7 @@
             android:textColor="@android:color/holo_green_dark"
             android:textSize="14sp"
             android:text="Поднять"
-            android:paddingTop="2dp" />
+            android:paddingTop="2dp"
+            android:layout_marginBottom="12dp"/>
     </LinearLayout>
 </FrameLayout>

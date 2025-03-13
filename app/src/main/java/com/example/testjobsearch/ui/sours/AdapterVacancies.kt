@@ -7,9 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjobsearch.R
+import com.example.testjobsearch.Vacancy
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
-class AdapterVacancies(private val items: List<ItemVacancy>) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
-
+class AdapterVacancies(private val items: MutableList<Vacancy>,private val filterFavorites: Boolean = false,private val maxItems: Int = items.size) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
+    private val filteredItems: List<Vacancy> = if (filterFavorites) {
+        items.filter { it.isFavorite } // Фильтруем только те, которые являются любимыми
+    } else {
+        items
+    }
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageLike: ImageView = view.findViewById(R.id.image_like)
         val textView_Watching: TextView = view.findViewById(R.id.text_watching)
@@ -26,15 +34,70 @@ class AdapterVacancies(private val items: List<ItemVacancy>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = items[position]
-        holder.imageLike.setImageResource(item.imageLikeId)
-        holder.textView_Watching.text = item.textWatcher
-        holder.textView_Post.text = item.textPost
-        holder.textView_Town.text = item.textTown
-        holder.textView_Company.text = item.textCompany
-        holder.textView_Experience.text = item.textExperience
-        holder.textView_Published.text = item.textPublished
+        val item = filteredItems[position]
+
+        if (item.lookingNumber>0) {holder.textView_Watching.text = getViewingMessage(item.lookingNumber)}
+        else {holder.textView_Watching.visibility = View.INVISIBLE}
+        holder.imageLike.setImageResource(choiceImage(item.isFavorite))
+
+        holder.textView_Post.text = item.title
+        holder.textView_Town.text = item.address.town
+        holder.textView_Company.text = item.company
+        holder.textView_Experience.text = item.experience.previewText
+        holder.textView_Published.text = getPublishedMessage(item.publishedDate)
+        holder.imageLike.setOnClickListener {
+            // Изменяем состояние isFavorite
+            item.isFavorite = !item.isFavorite
+
+            // Обновляем изображение
+            holder.imageLike.setImageResource(choiceImage(item.isFavorite))
+
+            // Уведомляем адаптер о том, что данные изменились
+            notifyItemChanged(position)
+        }
+
     }
 
-    override fun getItemCount() = items.size
+    fun getViewingMessage(lookingNumber: Int): String {
+        val word = when {
+            lookingNumber % 10 == 1 && lookingNumber % 100 != 11 -> "человек"
+            lookingNumber % 10 in 2..4 && (lookingNumber % 100 !in 12..14) -> "человека"
+            else -> "человеков"
+        }
+        return "Сейчас просматривает $lookingNumber $word"
+    }
+
+    private fun choiceImage(isFavorite: Boolean):Int {
+        if (isFavorite!= null&&isFavorite) {return R.drawable.img_heart_like}
+        else return R.drawable.img_heart
+    }
+
+    fun getPublishedMessage(publishedDate: String): String {
+        val date:LocalDate;
+        try {
+            date = LocalDate.parse(publishedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        }catch (e: DateTimeParseException) {
+            return ""
+        }
+        val day = date.dayOfMonth
+        val month = date.monthValue
+
+        val monthName = when (month) {
+            1 -> "января"
+            2 -> "февраля"
+            3 -> "марта"
+            4 -> "апреля"
+            5 -> "мая"
+            6 -> "июня"
+            7 -> "июля"
+            8 -> "августа"
+            9 -> "сентября"
+            10 -> "октября"
+            11 -> "ноября"
+            12 -> "декабря"
+            else -> ""
+        }
+        return "Опубликовано $day $monthName"
+    }
+    override fun getItemCount() = minOf(filteredItems.size, maxItems)
 }

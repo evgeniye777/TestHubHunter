@@ -32,21 +32,22 @@ class AdapterRecommends(private val items: List<Offer>) : RecyclerView.Adapter<A
             layoutParams.setMargins(p*2, 0, 0, 0)
             holder.recomendObject.layoutParams = layoutParams
         }
-        var id: Int = choiceImage(item.id)
-        if (id!=-1) {holder.imageView.setImageResource(id) }
-        else {holder.imageView.visibility = View.GONE }
-        var title: String = item.title
-        if (title==null) {title = ""}
-            holder.textView_text.text = title
-        if (item.button==null||item.button?.text==null) {
-            holder.textView_Up.visibility = View.GONE
+        val id: Int = choiceImage(item.id)
+        if (id!=-1) {
+            holder.imageView.visibility = View.VISIBLE
+            holder.imageView.setImageResource(id) }
+        else {
+            holder.imageView.visibility = View.INVISIBLE }
+        holder.textView_text.text = item.title
+        if (item.button?.text == null) {
+            holder.textView_Up.visibility = View.INVISIBLE
         }
     }
 
     override fun getItemCount() = items.size
     private fun choiceImage(id: String):Int {
         if (id==null) {return -1}
-        if (id == "near_vacancies") {return R.drawable.img_rect}
+        if (id == "near_vacancies") {return R.drawable.img_vacancies_for_recommends}
         else if (id == "level_up_resume") {return R.drawable.img_star_for_recomends}
         else if (id == "temporary_job") {return R.drawable.img_list_ok_for_recomends}
         else return -1

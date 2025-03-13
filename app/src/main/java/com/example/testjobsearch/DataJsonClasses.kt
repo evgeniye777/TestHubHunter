@@ -22,8 +22,8 @@ class DataJsonClasses {
     }
 }
 data class ResponseData(
-    val offers: List<Offer>,
-    val vacancies: List<Vacancy>
+    val offers: MutableList<Offer>,
+    val vacancies: MutableList<Vacancy>
 )
 
 data class Offer(
@@ -45,7 +45,7 @@ data class Vacancy(
     val company: String,
     val experience: Experience,
     val publishedDate: String,
-    val isFavorite: Boolean,
+    var isFavorite: Boolean,
     val salary: Salary,
     val schedules: List<String>,
     val appliedNumber: Int,
