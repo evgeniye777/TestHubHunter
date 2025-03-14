@@ -5,14 +5,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testjobsearch.DataJsonClasses
+import com.example.testjobsearch.MainActivity
 import com.example.testjobsearch.R
+import com.example.testjobsearch.ResponseData
+import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.Vacancy
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class AdapterVacancies(private val items: MutableList<Vacancy>,private val filterFavorites: Boolean = false,private val maxItems: Int = items.size) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
+class AdapterVacancies(private val items: MutableList<Vacancy>,
+                       private val sharedViewModel: SharedViewModel, private val filterFavorites: Boolean = false, private val maxItems: Int = items.size) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
+
+    private var listener: OnVacancyUpdateListener? = null
+    fun setListener(listener: OnVacancyUpdateListener) {
+        this.listener = listener
+    }
+
     private val filteredItems: List<Vacancy> = if (filterFavorites) {
         items.filter { it.isFavorite } // Фильтруем только те, которые являются любимыми
     } else {
@@ -48,12 +60,13 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,private val filte
         holder.imageLike.setOnClickListener {
             // Изменяем состояние isFavorite
             item.isFavorite = !item.isFavorite
-
+           if (listener==null) { if (item.isFavorite) { sharedViewModel.setMessage("+1") }
+            else { sharedViewModel.setMessage("-1") }}
             // Обновляем изображение
             holder.imageLike.setImageResource(choiceImage(item.isFavorite))
-
             // Уведомляем адаптер о том, что данные изменились
             notifyItemChanged(position)
+            listener?.onVacancyUpdate()
         }
 
     }
@@ -100,4 +113,8 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,private val filte
         return "Опубликовано $day $monthName"
     }
     override fun getItemCount() = minOf(filteredItems.size, maxItems)
+
+    interface OnVacancyUpdateListener {
+        fun onVacancyUpdate()
+    }
 }

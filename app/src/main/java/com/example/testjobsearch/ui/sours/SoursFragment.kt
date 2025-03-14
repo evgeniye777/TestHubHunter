@@ -11,17 +11,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjobsearch.DataJsonClasses
+import com.example.testjobsearch.MainActivity
 import com.example.testjobsearch.R
+import com.example.testjobsearch.ResponseData
 import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.databinding.FragmentSoursBinding
 
 class SoursFragment : Fragment() {
 
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentSoursBinding? = null
 
     private lateinit var recyclerViewRecommends: RecyclerView
@@ -36,15 +40,16 @@ class SoursFragment : Fragment() {
     private lateinit var layout_vacancies_and_correspondence: LinearLayout
     private lateinit var l_vacancies: TextView
 
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var dataJson: DataJsonClasses
+    private lateinit var responseData: ResponseData
     private val binding get() = _binding!!
+    private var state: Boolean = false
 
     // Метод для создания нового экземпляра фрагмента
     companion object {
-        fun newInstance(dataJson0: DataJsonClasses): SoursFragment {
+        fun newInstance(responseJson0: ResponseData): SoursFragment {
             val fragment = SoursFragment()
-            fragment.dataJson = dataJson0
+            fragment.responseData = responseJson0
             return fragment
         }
     }
@@ -54,16 +59,9 @@ class SoursFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        // Наблюдаем за изменениями в dataJson
-        sharedViewModel.dataJson.observe(viewLifecycleOwner, Observer { data ->
-            updateUI(data)
-        })
 
         _binding = FragmentSoursBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        var responseData = dataJson.parseJson(context)
 
         recyclerViewRecommends = binding.recyclerViewRecommends
         recyclerViewRecommends.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -76,7 +74,7 @@ class SoursFragment : Fragment() {
         recyclerViewVacancies.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         // Создаем адаптер для вакансий и устанавливаем его
-        adapterVacancies = AdapterVacancies(responseData.vacancies.toMutableList(),false,3)
+        adapterVacancies = AdapterVacancies(responseData.vacancies.toMutableList(),sharedViewModel,false,3)
         recyclerViewVacancies.adapter = adapterVacancies
 
         img_but_back = binding.imgButBack
@@ -95,8 +93,9 @@ class SoursFragment : Fragment() {
             l_vacancies.text = getVacanciesMessage(responseData.vacancies.size,true)
             img_but_back.setImageResource(R.drawable.img_arrow)
 
-            adapterVacancies = AdapterVacancies(responseData.vacancies)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel)
             recyclerViewVacancies.adapter = adapterVacancies
+            state = true;
         }
         //иконка_кнопка для возврата в предыдущее состояние
         img_but_back.setOnClickListener {
@@ -105,8 +104,9 @@ class SoursFragment : Fragment() {
             recyclerViewRecommends.visibility = View.VISIBLE
             img_but_back.setImageResource(R.drawable.img_sours)
 
-            adapterVacancies = AdapterVacancies(responseData.vacancies,false,3)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,3)
             recyclerViewVacancies.adapter = adapterVacancies
+            state = false
         }
         return root
     }
@@ -140,8 +140,16 @@ class SoursFragment : Fragment() {
         if (notYet) {return "$vacanciesCount $word"}
         else {return "Еще $vacanciesCount $word"}
     }
-    private fun updateUI(data: DataJsonClasses) {
-        dataJson = data
-    }
 
+    public fun updateList() {
+        if (state) {
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,)
+            recyclerViewVacancies.adapter = adapterVacancies
+            l_vacancies.text = getVacanciesMessage(adapterVacancies.itemCount,true)
+        }
+        else {
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,3)
+            recyclerViewVacancies.adapter = adapterVacancies
+        }
+    }
 }

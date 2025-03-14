@@ -3,10 +3,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 class SharedViewModel : ViewModel() {
-    private val _dataJson = MutableLiveData<DataJsonClasses>()
-    val dataJson: LiveData<DataJsonClasses> get() = _dataJson
+    private val _message = MutableLiveData<String>() // Поле для хранения строки
+    val message: LiveData<String> get() = _message // LiveData для наблюдения
 
-    fun setDataJson(data: DataJsonClasses) {
-        _dataJson.value = data
+    // Метод для установки строки
+    fun setMessage(msg: String) {
+        _message.value = msg
     }
 }
