@@ -74,7 +74,7 @@ class SoursFragment : Fragment() {
         recyclerViewVacancies.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         // Создаем адаптер для вакансий и устанавливаем его
-        adapterVacancies = AdapterVacancies(responseData.vacancies.toMutableList(),sharedViewModel,false,3)
+        adapterVacancies = AdapterVacancies(responseData.vacancies.toMutableList(),sharedViewModel,requireContext(),false,3)
         recyclerViewVacancies.adapter = adapterVacancies
 
         img_but_back = binding.imgButBack
@@ -93,7 +93,7 @@ class SoursFragment : Fragment() {
             l_vacancies.text = getVacanciesMessage(responseData.vacancies.size,true)
             img_but_back.setImageResource(R.drawable.img_arrow)
 
-            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext())
             recyclerViewVacancies.adapter = adapterVacancies
             state = true;
         }
@@ -104,7 +104,7 @@ class SoursFragment : Fragment() {
             recyclerViewRecommends.visibility = View.VISIBLE
             img_but_back.setImageResource(R.drawable.img_sours)
 
-            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,3)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),false,3)
             recyclerViewVacancies.adapter = adapterVacancies
             state = false
         }
@@ -143,12 +143,12 @@ class SoursFragment : Fragment() {
 
     public fun updateList() {
         if (state) {
-            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),false,)
             recyclerViewVacancies.adapter = adapterVacancies
             l_vacancies.text = getVacanciesMessage(adapterVacancies.itemCount,true)
         }
         else {
-            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,false,3)
+            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),false,3)
             recyclerViewVacancies.adapter = adapterVacancies
         }
     }

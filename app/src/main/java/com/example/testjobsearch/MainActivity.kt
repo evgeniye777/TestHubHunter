@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 img_new_like.visibility = View.GONE
                 text_quantity.visibility = View.GONE
             }
-            vivodMesage(dataJson.writeJsonToFile(this, responseData))
+            dataJson.writeJsonToFile(this, responseData)
         })
         if (savedInstanceState == null) {
             replaceFragment(SoursFragment.newInstance(responseData), "SOURS_FRAGMENT")
@@ -179,3 +179,4 @@ class MainActivity : AppCompatActivity() {
     }
 }
 //https\://services.gradle.org/distributions/gradle-8.12.1-bin.zip
+//file\:///D:/MyFiles/Trainings/0_Gradle/gradle-8.12.1-bin.zip

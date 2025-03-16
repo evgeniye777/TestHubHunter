@@ -8,16 +8,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testjobsearch.DataJsonClasses
 import com.example.testjobsearch.ResponseData
 import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.databinding.FragmentLikeBinding
 import com.example.testjobsearch.ui.sours.AdapterVacancies
-import com.example.testjobsearch.ui.sours.SoursFragment
 
 class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
 
@@ -52,7 +48,7 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
         recyclerViewVacancies.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         // Создаем адаптер для вакансий и устанавливаем его
-        adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,true)
+        adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),true)
 
         l_vacancies_like = binding.lVacanciesLike
         l_vacancies_like.text = getVacanciesMessage(adapterVacancies.itemCount,true)
@@ -92,7 +88,7 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
         else {return "Еще $vacanciesCount $word"}
     }
     fun updateList() {
-        adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,true)
+        adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),true)
         recyclerViewVacancies.adapter = adapterVacancies
         l_vacancies_like.text = getVacanciesMessage(adapterVacancies.itemCount,true)
         adapterVacancies.setListener(this) // Устанавливаем слушатель здесь

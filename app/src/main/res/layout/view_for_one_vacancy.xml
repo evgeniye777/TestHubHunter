@@ -19,21 +19,13 @@
     android:tint="@color/cardview_dark_background"
     android:scaleType="fitXY">
 </ImageView>
-    <ImageView
-        android:id="@+id/image_like"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:padding="5dp"
-        android:layout_margin="15dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/img_heart"
-        android:layout_gravity="end"/>
-
     <LinearLayout
+        android:id="@+id/click_vacation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="70dp"
         android:orientation="vertical">
 
         <TextView
@@ -118,18 +110,27 @@
             android:text="Опубликовано 20 февраля"
             android:textColor="@color/my_gray"
             android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/but_respond"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginRight="15sp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/style_but_respond"
-            android:text="Откликнуться"
-            android:textAllCaps="false"
-            android:textSize="16sp"></Button>
     </LinearLayout>
-
+    <ImageView
+        android:id="@+id/image_like"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="5dp"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_heart"
+        android:layout_gravity="end"/>
+    <Button
+        android:id="@+id/but_respond"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/style_but_respond"
+        android:text="Откликнуться"
+        android:textAllCaps="false"
+        android:layout_gravity="bottom"
+        android:textSize="16sp"></Button>
 </FrameLayout>

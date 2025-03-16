@@ -1,10 +1,13 @@
 package com.example.testjobsearch.ui.sours
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testjobsearch.DataJsonClasses
@@ -18,7 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class AdapterVacancies(private val items: MutableList<Vacancy>,
-                       private val sharedViewModel: SharedViewModel, private val filterFavorites: Boolean = false, private val maxItems: Int = items.size) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
+                       private val sharedViewModel: SharedViewModel, private val context: Context, private val filterFavorites: Boolean = false, private val maxItems: Int = items.size) : RecyclerView.Adapter<AdapterVacancies.MyViewHolder>() {
 
     private var listener: OnVacancyUpdateListener? = null
     fun setListener(listener: OnVacancyUpdateListener) {
@@ -38,6 +41,7 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
         val textView_Company: TextView = view.findViewById(R.id.text_name_company)
         val textView_Experience: TextView = view.findViewById(R.id.text_experience)
         val textView_Published: TextView = view.findViewById(R.id.text_published)
+        val click_vacancy: LinearLayout = view.findViewById(R.id.click_vacation)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -68,7 +72,9 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
             notifyItemChanged(position)
             listener?.onVacancyUpdate()
         }
-
+        holder.click_vacancy.setOnClickListener {
+            vivodMesage("Здесь будет страница вакансии '"+holder.textView_Post.text+"'")
+        }
     }
 
     fun getViewingMessage(lookingNumber: Int): String {
@@ -116,5 +122,16 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
 
     interface OnVacancyUpdateListener {
         fun onVacancyUpdate()
+    }
+
+    fun vivodMesage(text: String?) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Message")
+            .setMessage(text?:"null")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 }

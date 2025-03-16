@@ -10,14 +10,22 @@ class DataJsonClasses {
 
     private val gson = Gson()
 
-    fun readJsonFromAssets(context: Context?, fileName: String): String {
-        val inputStream = context?.assets?.open(fileName)
-        val reader = InputStreamReader(inputStream)
-        return reader.use { it.readText() }
+    fun readJsonFromAssets(context: Context?): String? {
+        return try {
+            val file = File(context?.filesDir, "data.json")
+            if (file.exists()) {
+                file.readText() // Чтение содержимого файла
+            } else {
+                null // Файл не найден
+            }
+        } catch (e: Exception) {
+            Log.e("DataJsonClasses", "Error reading JSON from file: ${e.message}")
+            null
+        }
     }
 
     fun parseJson(context: Context?): ResponseData {
-        val jsonStringFromAssets = readJsonFromAssets(context, "data.json")
+        val jsonStringFromAssets = readJsonFromAssets(context)
         // Десериализация JSON в объект ResponseData
         return gson.fromJson(jsonStringFromAssets, ResponseData::class.java)
     }
@@ -27,6 +35,7 @@ class DataJsonClasses {
             val file = File(context?.filesDir, "data.json")
             FileOutputStream(file).use { outputStream ->
             outputStream.write(jsonString.toByteArray())
+                return jsonString
         }} catch (e: Exception) {
             Log.e("DataJsonClasses", "Error writing JSON to file: ${e.message}")
             return "Error writing JSON to file: ${e.message}"
