@@ -52,6 +52,7 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = filteredItems[position]
 
+        //Если передан lookingNumber
         if (item.lookingNumber>0) {holder.textView_Watching.text = getViewingMessage(item.lookingNumber)}
         else {holder.textView_Watching.visibility = View.INVISIBLE}
         holder.imageLike.setImageResource(choiceImage(item.isFavorite))
@@ -73,11 +74,13 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
             listener?.onVacancyUpdate()
         }
         holder.click_vacancy.setOnClickListener {
+            //Заглушка
             vivodMesage("Здесь будет страница вакансии '"+holder.textView_Post.text+"'")
         }
     }
 
     fun getViewingMessage(lookingNumber: Int): String {
+        //Функция склонения "Просматривают n человек"
         val word = when {
             lookingNumber % 10 == 1 && lookingNumber % 100 != 11 -> "человек"
             lookingNumber % 10 in 2..4 && (lookingNumber % 100 !in 12..14) -> "человека"
@@ -87,11 +90,13 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
     }
 
     private fun choiceImage(isFavorite: Boolean):Int {
+        //установка лайка по полученному значению boolean из ResponseDate
         if (isFavorite!= null&&isFavorite) {return R.drawable.img_heart_like}
         else return R.drawable.img_heart
     }
 
     fun getPublishedMessage(publishedDate: String): String {
+        //Склонение "Опубликовано nn месяца"
         val date:LocalDate;
         try {
             date = LocalDate.parse(publishedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -121,10 +126,12 @@ class AdapterVacancies(private val items: MutableList<Vacancy>,
     override fun getItemCount() = minOf(filteredItems.size, maxItems)
 
     interface OnVacancyUpdateListener {
+        //интерфейс для того чтобы уведомить фрагмент обновиться, при изменении лайка
         fun onVacancyUpdate()
     }
 
     fun vivodMesage(text: String?) {
+        //функция для вывода лиалогового окна, используется как Заглушка
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Message")
             .setMessage(text?:"null")

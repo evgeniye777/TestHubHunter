@@ -24,8 +24,25 @@ class DataJsonClasses {
         }
     }
 
+    fun readJsonFromAssets(context: Context?, fileName: String): String? {
+        //чтение файла из папки assets первый раз
+        return try {
+            val inputStream = context?.assets?.open(fileName) // Открываем файл из assets
+            inputStream?.bufferedReader().use { it?.readText() } // Читаем содержимое файла
+        } catch (e: Exception) {
+            Log.e("DataJsonClasses", "Error reading JSON from assets: ${e.message}")
+            null
+        }
+    }
+
     fun parseJson(context: Context?): ResponseData {
-        val jsonStringFromAssets = readJsonFromAssets(context)
+        var jsonStringFromAssets: String?
+        try {
+            jsonStringFromAssets = readJsonFromAssets(context)
+            if (jsonStringFromAssets==null) {throw IllegalArgumentException("JSON string is null")}
+        }catch (e: Exception) {
+            jsonStringFromAssets = readJsonFromAssets(context,"data.json")
+        }
         // Десериализация JSON в объект ResponseData
         return gson.fromJson(jsonStringFromAssets, ResponseData::class.java)
     }

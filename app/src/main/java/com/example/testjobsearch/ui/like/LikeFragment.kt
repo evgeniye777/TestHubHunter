@@ -14,6 +14,7 @@ import com.example.testjobsearch.ResponseData
 import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.databinding.FragmentLikeBinding
 import com.example.testjobsearch.ui.sours.AdapterVacancies
+import com.google.gson.Gson
 
 class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
 
@@ -27,15 +28,32 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
 
     private lateinit var responseData: ResponseData
     private val binding get() = _binding!!
+    //для востановления состояния
+    private val gson = Gson()
 
     companion object {
         fun newInstance(responseJson0: ResponseData): LikeFragment {
             val fragment = LikeFragment()
+            //передача преобразованных данных json при первом запуске фрагмента
             fragment.responseData = responseJson0
             return fragment
         }
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Сериализуем responseData в JSON и сохраняем в Bundle
+        val jsonString = gson.toJson(responseData)
+        outState.putString("responseData", jsonString)
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            // Восстанавливаем responseData из Bundle
+            val jsonString = savedInstanceState.getString("responseData")
+            responseData = gson.fromJson(jsonString, ResponseData::class.java)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,19 +84,12 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
 
     override fun onResume() {
         super.onResume()
+        //через интерфейс передаем информацию главной активности, чтобы удалить уведомление о новых лайках (т к пользователь зашел в Избранное)
         sharedViewModel.setMessage("del")
     }
-    fun vivodMesage(text: String) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Message")
-            .setMessage(text)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
-    }
+
     fun getVacanciesMessage(vacanciesCount: Int, notYet: Boolean = false): String {
+        //функция для склонения "Еще n вакансий" или "n вакансий"
         val word = when {
             vacanciesCount % 10 == 1 && vacanciesCount % 100 != 11 -> "вакансия"
             vacanciesCount % 10 in 2..4 && (vacanciesCount % 100 !in 12..14) -> "вакансии"
@@ -88,6 +99,7 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
         else {return "Еще $vacanciesCount $word"}
     }
     fun updateList() {
+        //функция для обновления адаптера, используется состороны главной активности и через интерфейс с адаптером в момент установки или адаления лайка
         adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),true)
         recyclerViewVacancies.adapter = adapterVacancies
         l_vacancies_like.text = getVacanciesMessage(adapterVacancies.itemCount,true)
@@ -96,6 +108,7 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
     }
 
     override fun onVacancyUpdate() {
-        updateList() // Вызываем метод обновления списка
+        // Метод интерфейса для вызывания метода обновления списка
+        updateList()
     }
 }

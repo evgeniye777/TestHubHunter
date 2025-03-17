@@ -30,6 +30,7 @@ class AdapterRecommends(private val items: List<Offer>) : RecyclerView.Adapter<A
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = items[position]
+        //выравнием первый элемент по левой границы как и неподвижный
         if (position==0) {
             val p = holder.recomendObject.paddingLeft
             val layoutParams = holder.recomendObject.layoutParams as ViewGroup.MarginLayoutParams
@@ -37,6 +38,8 @@ class AdapterRecommends(private val items: List<Offer>) : RecyclerView.Adapter<A
             holder.recomendObject.layoutParams = layoutParams
         }
         val id: Int = choiceImage(item.id)
+
+        // установка иконки из переданного ResponseDate
         if (id!=-1) {
             holder.imageView.visibility = View.VISIBLE
             holder.imageView.setImageResource(id) }
@@ -44,9 +47,13 @@ class AdapterRecommends(private val items: List<Offer>) : RecyclerView.Adapter<A
             holder.imageView.visibility = View.INVISIBLE }
         holder.textView_text.text = item.title
         trimTextToThreeLines(holder.textView_text)
+
+        //Показ надписи "Показать"
         if (item.button?.text == null) {
             holder.textView_Up.visibility = View.INVISIBLE
         }
+
+        //Кликабельность (переход по ссылке link)
         holder.layout_click_rekomend.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
@@ -65,6 +72,7 @@ class AdapterRecommends(private val items: List<Offer>) : RecyclerView.Adapter<A
     }
 
     fun trimTextToThreeLines(textView: TextView) {
+        //функция для ограничения Заголовка
         val originalText = textView.text.toString()
         textView.text = originalText // Устанавливаем текст, чтобы получить его размеры
 

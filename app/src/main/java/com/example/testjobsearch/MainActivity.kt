@@ -7,13 +7,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import com.example.testjobsearch.databinding.ActivityMainBinding
 import com.example.testjobsearch.ui.like.LikeFragment
 import com.example.testjobsearch.ui.message.MessageFragment
@@ -26,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageViews: Array<ImageView>
     private lateinit var textViews: Array<TextView>
-    private lateinit var navController: NavController
 
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var dataJson: DataJsonClasses
@@ -98,27 +94,28 @@ class MainActivity : AppCompatActivity() {
         myLinear_menu_sours.setOnClickListener {
             changeColorTextImage(0)
             replaceFragment(SoursFragment.newInstance(responseData), "SOURS_FRAGMENT")
-            //navController.navigate(R.id.navigation_sours, null, null, null)
         }
         val myLinear_menu_like: LinearLayout = findViewById(R.id.menu_like)
         myLinear_menu_like.setOnClickListener {
             changeColorTextImage(1)
-            //navController.navigate(R.id.navigation_like, null, null, null)
             replaceFragment(LikeFragment.newInstance(responseData), "LIKE_FRAGMENT")
         }
         val myLinear_menu_responses: LinearLayout = findViewById(R.id.menu_responses)
         myLinear_menu_responses.setOnClickListener {
             changeColorTextImage(2)
+            //заглушка
             replaceFragment(ResponsesFragment(), "RESPONSES_FRAGMENT")
         }
         val myLinear_menu_message: LinearLayout = findViewById(R.id.menu_message)
         myLinear_menu_message.setOnClickListener {
             changeColorTextImage(3)
+            //заглушка
             replaceFragment(MessageFragment(), "MESSAGE_FRAGMENT")
         }
         val myLinear_menu_profile: LinearLayout = findViewById(R.id.menu_profile)
         myLinear_menu_profile.setOnClickListener {
             changeColorTextImage(4)
+            //заглушка
             replaceFragment(ProfileFragment(), "PROFILE_FRAGMENT")
         }
     }
@@ -135,17 +132,6 @@ class MainActivity : AppCompatActivity() {
                 textViews.get(i).setTextColor(ContextCompat.getColor(this,R.color.menu_not_click));
             }
         }
-    }
-
-    fun vivodMesage(text: String?) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Message")
-            .setMessage(text?:"null")
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
     }
 
     private fun replaceFragment(fragment: Fragment, tag: String) {
@@ -178,5 +164,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-//https\://services.gradle.org/distributions/gradle-8.12.1-bin.zip
-//file\:///D:/MyFiles/Trainings/0_Gradle/gradle-8.12.1-bin.zip

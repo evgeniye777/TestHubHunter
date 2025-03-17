@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import com.google.gson.Gson
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -44,16 +44,33 @@ class SoursFragment : Fragment() {
     private lateinit var responseData: ResponseData
     private val binding get() = _binding!!
     private var state: Boolean = false
+    //для востановления состояния
+    private val gson = Gson()
 
     // Метод для создания нового экземпляра фрагмента
     companion object {
         fun newInstance(responseJson0: ResponseData): SoursFragment {
             val fragment = SoursFragment()
+            //передача преобразованных данных json при создании фрагмента
             fragment.responseData = responseJson0
             return fragment
         }
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Сериализуем responseData в JSON и сохраняем в Bundle
+        val jsonString = gson.toJson(responseData)
+        outState.putString("responseData", jsonString)
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            // Восстанавливаем responseData из Bundle
+            val jsonString = savedInstanceState.getString("responseData")
+            responseData = gson.fromJson(jsonString, ResponseData::class.java)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -97,7 +114,7 @@ class SoursFragment : Fragment() {
             recyclerViewVacancies.adapter = adapterVacancies
             state = true;
         }
-        //иконка_кнопка для возврата в предыдущее состояние
+        // обрабочик иконка_кнопка для возврата в предыдущее состояние
         img_but_back.setOnClickListener {
             layout_vacancies_and_correspondence.visibility = View.GONE
             but_all_vacancies.visibility = View.VISIBLE
@@ -111,27 +128,8 @@ class SoursFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    fun vivodMesage(text: String) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Message")
-            .setMessage(text)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
-    }
-
     fun getVacanciesMessage(vacanciesCount: Int, notYet: Boolean = false): String {
+        //функция для склонения "Еще n вакансий" или "n вакансий"
         val word = when {
             vacanciesCount % 10 == 1 && vacanciesCount % 100 != 11 -> "вакансия"
             vacanciesCount % 10 in 2..4 && (vacanciesCount % 100 !in 12..14) -> "вакансии"
@@ -141,7 +139,8 @@ class SoursFragment : Fragment() {
         else {return "Еще $vacanciesCount $word"}
     }
 
-    public fun updateList() {
+    fun updateList() {
+        //функция для обновления списка при измении (нажатии лайков)
         if (state) {
             adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),false,)
             recyclerViewVacancies.adapter = adapterVacancies
