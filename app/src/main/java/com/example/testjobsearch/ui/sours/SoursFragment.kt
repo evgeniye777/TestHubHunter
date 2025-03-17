@@ -1,6 +1,7 @@
 package com.example.testjobsearch.ui.sours
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,22 +10,24 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.gson.Gson
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testjobsearch.DataJsonClasses
-import com.example.testjobsearch.MainActivity
 import com.example.testjobsearch.R
 import com.example.testjobsearch.ResponseData
 import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.databinding.FragmentSoursBinding
+import com.google.gson.Gson
+
 
 class SoursFragment : Fragment() {
 
+    private lateinit var listener: MyFragmentListener
+
+    interface MyFragmentListener {
+        fun getMyResponseDate(): ResponseData
+    }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentSoursBinding? = null
 
@@ -40,35 +43,17 @@ class SoursFragment : Fragment() {
     private lateinit var layout_vacancies_and_correspondence: LinearLayout
     private lateinit var l_vacancies: TextView
 
-    private lateinit var dataJson: DataJsonClasses
     private lateinit var responseData: ResponseData
     private val binding get() = _binding!!
     private var state: Boolean = false
-    //для востановления состояния
-    private val gson = Gson()
 
-    // Метод для создания нового экземпляра фрагмента
-    companion object {
-        fun newInstance(responseJson0: ResponseData): SoursFragment {
-            val fragment = SoursFragment()
-            //передача преобразованных данных json при создании фрагмента
-            fragment.responseData = responseJson0
-            return fragment
-        }
-    }
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // Сериализуем responseData в JSON и сохраняем в Bundle
-        val jsonString = gson.toJson(responseData)
-        outState.putString("responseData", jsonString)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
-            // Восстанавливаем responseData из Bundle
-            val jsonString = savedInstanceState.getString("responseData")
-            responseData = gson.fromJson(jsonString, ResponseData::class.java)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MyFragmentListener) {
+            //активация интерфейса с активностью
+            listener = context
+        } else {
+            throw ClassCastException("$context must implement MyFragmentListener")
         }
     }
     override fun onCreateView(
@@ -76,7 +61,13 @@ class SoursFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+            try {
+                //получаем экземпляр responeDate из MainActivity
+                responseData = listener.getMyResponseDate()
+            }catch (e:Exception) {
+                //закрываем данную ссесию фрагмента, т к без responseDate нет смысла продолжать работать (если это произойдет то потребуется снова нажать на пункт меню)
+                parentFragmentManager.beginTransaction().remove(this).commit()
+            }
         _binding = FragmentSoursBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -142,7 +133,12 @@ class SoursFragment : Fragment() {
     fun updateList() {
         //функция для обновления списка при измении (нажатии лайков)
         if (state) {
-            adapterVacancies = AdapterVacancies(responseData.vacancies,sharedViewModel,requireContext(),false,)
+            adapterVacancies = AdapterVacancies(
+                responseData.vacancies,
+                sharedViewModel,
+                requireContext(),
+                false
+            )
             recyclerViewVacancies.adapter = adapterVacancies
             l_vacancies.text = getVacanciesMessage(adapterVacancies.itemCount,true)
         }

@@ -1,6 +1,7 @@
 package com.example.testjobsearch
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -18,7 +19,8 @@ import com.example.testjobsearch.ui.profile.ProfileFragment
 import com.example.testjobsearch.ui.responses.ResponsesFragment
 import com.example.testjobsearch.ui.sours.SoursFragment
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(),SoursFragment.MyFragmentListener,LikeFragment.MyFragmentListener{
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageViews: Array<ImageView>
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var dataJson: DataJsonClasses
+    private lateinit var responseData: ResponseData
 
     @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dataJson = DataJsonClasses()
-        var responseData = dataJson.parseJson(this)
+        responseData = dataJson.parseJson(this)
 
         val img_new_like: ImageView = findViewById(R.id.img_red_circle)
         val text_quantity: TextView = findViewById(R.id.text_quantity)
@@ -71,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             dataJson.writeJsonToFile(this, responseData)
         })
         if (savedInstanceState == null) {
-            replaceFragment(SoursFragment.newInstance(responseData), "SOURS_FRAGMENT")
+            replaceFragment(SoursFragment(), "SOURS_FRAGMENT")
         }
         supportActionBar?.hide()
 
@@ -93,12 +96,12 @@ class MainActivity : AppCompatActivity() {
         val myLinear_menu_sours: LinearLayout = findViewById(R.id.menu_sours)
         myLinear_menu_sours.setOnClickListener {
             changeColorTextImage(0)
-            replaceFragment(SoursFragment.newInstance(responseData), "SOURS_FRAGMENT")
+            replaceFragment(SoursFragment(), "SOURS_FRAGMENT")
         }
         val myLinear_menu_like: LinearLayout = findViewById(R.id.menu_like)
         myLinear_menu_like.setOnClickListener {
             changeColorTextImage(1)
-            replaceFragment(LikeFragment.newInstance(responseData), "LIKE_FRAGMENT")
+            replaceFragment(LikeFragment(), "LIKE_FRAGMENT")
         }
         val myLinear_menu_responses: LinearLayout = findViewById(R.id.menu_responses)
         myLinear_menu_responses.setOnClickListener {
@@ -162,5 +165,9 @@ class MainActivity : AppCompatActivity() {
 
             commit()
         }
+    }
+
+    override fun getMyResponseDate(): ResponseData {
+        return responseData
     }
 }

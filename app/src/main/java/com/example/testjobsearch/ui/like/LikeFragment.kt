@@ -1,5 +1,6 @@
 package com.example.testjobsearch.ui.like
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,15 @@ import com.example.testjobsearch.ResponseData
 import com.example.testjobsearch.SharedViewModel
 import com.example.testjobsearch.databinding.FragmentLikeBinding
 import com.example.testjobsearch.ui.sours.AdapterVacancies
+import com.example.testjobsearch.ui.sours.SoursFragment.MyFragmentListener
 import com.google.gson.Gson
 
 class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
+    private lateinit var listener: MyFragmentListener
 
+    interface MyFragmentListener {
+        fun getMyResponseDate(): ResponseData
+    }
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentLikeBinding? = null
 
@@ -31,27 +37,13 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
     //для востановления состояния
     private val gson = Gson()
 
-    companion object {
-        fun newInstance(responseJson0: ResponseData): LikeFragment {
-            val fragment = LikeFragment()
-            //передача преобразованных данных json при первом запуске фрагмента
-            fragment.responseData = responseJson0
-            return fragment
-        }
-    }
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // Сериализуем responseData в JSON и сохраняем в Bundle
-        val jsonString = gson.toJson(responseData)
-        outState.putString("responseData", jsonString)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
-            // Восстанавливаем responseData из Bundle
-            val jsonString = savedInstanceState.getString("responseData")
-            responseData = gson.fromJson(jsonString, ResponseData::class.java)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MyFragmentListener) {
+            //активация интерфейса с активностью
+            listener = context
+        } else {
+            throw ClassCastException("$context must implement MyFragmentListener")
         }
     }
     override fun onCreateView(
@@ -59,6 +51,13 @@ class LikeFragment : Fragment(), AdapterVacancies.OnVacancyUpdateListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        try {
+            //получаем экземпляр responeDate из MainActivity
+            responseData = listener.getMyResponseDate()
+        }catch (e:Exception) {
+            //закрываем данную ссесию фрагмента, т к без responseDate нет смысла продолжать работать (если это произойдет то потребуется снова нажать на пункт меню)
+            parentFragmentManager.beginTransaction().remove(this).commit()
+        }
         _binding = FragmentLikeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
